@@ -72,7 +72,6 @@
             border-radius: 15px;
         }
 
-        /* --- INPUT DEL EASTER EGG --- */
         #date-input {
             border: 2px solid #ffc2d1;
             border-radius: 15px;
@@ -83,7 +82,6 @@
             color: #d63384;
             width: 80%;
             margin: 15px 0;
-            transition: all 0.3s ease;
         }
 
         /* --- BOTONES --- */
@@ -93,7 +91,6 @@
             align-items: center;
             gap: 20px;
             margin-top: 20px;
-            position: relative;
             min-height: 80px;
         }
 
@@ -104,11 +101,11 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
         }
 
         #btn-si { background-color: var(--primary-pink); color: white; z-index: 100; }
-        #btn-no { background-color: #adb5bd; color: white; z-index: 99; }
+        #btn-no { background-color: #adb5bd; color: white; z-index: 999; }
 
         /* --- NOTA SECRETA --- */
         #secret-note {
@@ -151,10 +148,10 @@
         <h1 id="question">¿Quieres ser mi San Valentín? ❤️</h1>
 
         <div id="input-wrapper">
-            <input type="text" id="date-input" placeholder="¿qué debería escribir aquí, un día importante?">
+            <input type="text" id="date-input" placeholder="Nuestra fecha... (DD/MM/AAAA)">
         </div>
         
-        <div class="buttons">
+        <div class="buttons" id="btn-group">
             <button id="btn-si">¡SÍ! 😍</button>
             <button id="btn-no">No 😢</button>
         </div>
@@ -170,7 +167,7 @@
         let noClicks = 0;
         let isMoving = false;
 
-        // LOGICA EASTER EGG
+        // EASTER EGG
         dateInput.addEventListener('input', (e) => {
             if (e.target.value === '24/09/2023') {
                 document.getElementById('secret-note').style.display = 'block';
@@ -183,7 +180,7 @@
             document.getElementById('overlay').style.display = 'none';
         }
 
-        // LOGICA BOTÓN SÍ
+        // CLIC SÍ
         btnSi.addEventListener('click', () => {
             document.getElementById('input-wrapper').style.display = 'none';
             if (noClicks === 0) {
@@ -198,25 +195,31 @@
         function finalCelebration() {
             questionText.innerHTML = "¡SABÍA QUE DIRÍAS QUE SÍ! ❤️ <br> Te amo mi princesita.";
             mainImg.src = "final.gif"; 
-            document.querySelector('.buttons').style.display = 'none';
+            document.getElementById('btn-group').style.display = 'none';
+            if(isMoving) btnNo.style.display = 'none'; // Por si estaba huyendo
             setInterval(createHeart, 100);
         }
 
-        // LOGICA BOTÓN NO
+        // CLIC NO
         btnNo.addEventListener('click', () => {
             if (noClicks < 4) {
                 const frases = ["¿Segura?", "¿Piénsalo?", "Mira el rosa...", "¡Noooo!"];
                 btnNo.innerHTML = frases[noClicks];
                 noClicks++;
-                // Crecimiento del botón Sí
                 btnSi.style.transform = `scale(${1 + (noClicks * 0.4)})`;
             } else {
-                isMoving = true;
+                if(!isMoving) {
+                    isMoving = true;
+                    // TRUCO MÁGICO: Sacamos el botón al body para que no desaparezca
+                    document.body.appendChild(btnNo);
+                    btnNo.style.position = 'fixed';
+                    btnNo.style.zIndex = '9999';
+                }
                 moveNoButton();
             }
         });
 
-        // HUIDA POR MOVIMIENTO (Basada en tu versión 1)
+        // MOVIMIENTO (VERSIÓN 1 PURA)
         btnNo.addEventListener('mouseover', () => {
             if (isMoving) moveNoButton();
         });
@@ -225,12 +228,11 @@
             const x = Math.random() * (window.innerWidth - btnNo.offsetWidth);
             const y = Math.random() * (window.innerHeight - btnNo.offsetHeight);
             
-            btnNo.style.position = 'fixed'; // Pasa a fixed para volar por la pantalla
             btnNo.style.left = x + 'px';
             btnNo.style.top = y + 'px';
         }
 
-        // LLUVIA DE CORAZONES
+        // CORAZONES
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
