@@ -151,7 +151,7 @@
         <h1 id="question">¿Quieres ser mi San Valentín? ❤️</h1>
 
         <div id="input-wrapper">
-            <input type="text" id="date-input" placeholder="¿qué debería escribir aquí, día importante?">
+            <input type="text" id="date-input" placeholder="¿qué debería escribir aquí, un día importante?">
         </div>
         
         <div class="buttons">
@@ -234,7 +234,7 @@
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            const icons = ['❤️', '💖', '💐', '✨'];
+            const icons = ['❤️', '💖', '💐'];
             heart.innerHTML = icons[Math.floor(Math.random() * icons.length)];
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.animationDuration = Math.random() * 3 + 2 + 's';
