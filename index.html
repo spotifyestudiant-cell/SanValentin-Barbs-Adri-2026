@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para mi amorsito ❤️</title>
+    <title>Para Bárbara ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -12,7 +12,7 @@
         }
 
         body {
-            background: #ffeef2;
+            background-color: #ffeef2;
             font-family: 'Quicksand', sans-serif;
             display: flex;
             justify-content: center;
@@ -38,15 +38,15 @@
             to { transform: translateY(110vh) rotate(360deg); }
         }
 
-        /* --- CONTENEDOR --- */
+        /* --- CONTENEDOR ESTILO CRISTAL --- */
         .container {
             background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
             padding: 40px;
             border-radius: 30px;
             box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
             border: 2px solid white;
-            max-width: 450px;
+            max-width: 400px;
             width: 85%;
             z-index: 10;
             position: relative;
@@ -59,14 +59,18 @@
             margin-bottom: 20px;
         }
 
-        .gif-container {
+        .img-container {
+            width: 100%;
             height: 200px;
             margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .gif-container img {
+        .img-container img {
+            max-height: 100%;
             border-radius: 15px;
-            height: 100%;
         }
 
         .buttons {
@@ -74,8 +78,7 @@
             justify-content: center;
             align-items: center;
             gap: 15px;
-            min-height: 120px;
-            position: relative;
+            min-height: 100px;
         }
 
         button {
@@ -85,19 +88,20 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: transform 0.2s ease;
         }
 
         #btn-si {
             background-color: var(--primary-pink);
             color: white;
-            z-index: 10;
+            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3);
         }
 
         #btn-no {
             background-color: #adb5bd;
             color: white;
-            z-index: 5;
+            /* El botón No tiene una transición suave para cuando se mueve */
+            transition: all 0.2s ease;
         }
 
     </style>
@@ -105,8 +109,8 @@
 <body>
 
     <div class="container" id="main-card">
-        <div class="gif-container">
-            <img id="main-gif" src="https://media.tenor.com/EfE_Y_pS66kAAAAi/milk-and-mocha-bear-hearts.gif" alt="Amor">
+        <div class="img-container">
+            <img id="main-img" src="https://i.pinimg.com/originals/f6/a5/f7/f6a5f7ddff51a40bcc01fa9cf60129a4.gif" alt="Cargando amor...">
         </div>
         <h1 id="question">Bárbara, amorsito... ¿quieres ser mi San Valentín? ❤️</h1>
         
@@ -119,7 +123,7 @@
     <script>
         const btnSi = document.getElementById('btn-si');
         const btnNo = document.getElementById('btn-no');
-        const mainGif = document.getElementById('main-gif');
+        const mainImg = document.getElementById('main-img');
         const question = document.getElementById('question');
         
         let noClicks = 0;
@@ -135,24 +139,22 @@
         // LOGICA BOTÓN SÍ
         btnSi.addEventListener('click', () => {
             if (noClicks === 0) {
-                // Si le da que sí a la primera
-                question.innerHTML = "¡Vaya, qué rapidez! 😍 <br> ¡Me encantas! Pero espera...";
-                mainGif.src = "https://media.tenor.com/s6pE_tB6m6gAAAAi/mocha-bear-hearts.gif";
+                // Si le da que sí a la primera sin haber tocado el NO
+                question.innerHTML = "¡Vaya, qué rapidez! 😍 <br> ¡Sabía que me amabas!";
+                mainImg.src = "https://i.pinimg.com/originals/91/9d/23/919d239c09641712a1f64f40f28a8d13.gif";
                 
-                // Pequeña pausa para hacerlo más divertido
-                setTimeout(() => {
-                    finalCelebration();
-                }, 2000);
+                setTimeout(finalCelebration, 2000);
             } else {
                 finalCelebration();
             }
         });
 
         function finalCelebration() {
-            question.innerHTML = "¡SABÍA QUE DIRÍAS QUE SÍ! ❤️ <br> Te amo muchísimo, mi princesita.";
-            mainGif.src = "https://media.tenor.com/9v6v99W3_pEAAAAi/milk-and-mocha.gif"; 
+            question.innerHTML = "¡SABÍA QUE DIRÍAS QUE SÍ! ❤️ <br> Te amo mi princesita.";
+            mainImg.src = "https://i.pinimg.com/originals/07/54/60/0754602f35496412176846f8885b5465.gif"; 
             document.getElementById('button-group').style.display = 'none';
-            setInterval(createHeart, 100); // Lluvia intensa de corazones
+            // Lluvia intensa
+            setInterval(createHeart, 100);
         }
 
         // LOGICA BOTÓN NO
@@ -160,33 +162,35 @@
             if (noClicks < frasesNo.length) {
                 btnNo.innerHTML = frasesNo[noClicks];
                 noClicks++;
-                // Aumentamos un poquito el botón Sí para tentar
-                btnSi.style.transform = `scale(${1 + (noClicks * 0.2)})`;
+                // El botón SÍ crece cada vez que dice que NO
+                btnSi.style.transform = `scale(${1 + (noClicks * 0.3)})`;
             } else {
-                // A partir de aquí empieza a huir
                 isMoving = true;
                 moveButton();
             }
         });
 
-        // Evento cuando pasa el ratón por encima (solo después de los clics)
+        // Hacer que el botón escape cuando intenten pasar el ratón por encima
         btnNo.addEventListener('mouseover', () => {
             if (isMoving) moveButton();
         });
 
         function moveButton() {
-            const x = Math.random() * (window.innerWidth - btnNo.offsetWidth - 20);
-            const y = Math.random() * (window.innerHeight - btnNo.offsetHeight - 20);
+            // Calculamos posiciones seguras para que no se salga de la pantalla
+            const padding = 50;
+            const x = Math.random() * (window.innerWidth - btnNo.offsetWidth - padding);
+            const y = Math.random() * (window.innerHeight - btnNo.offsetHeight - padding);
+            
             btnNo.style.position = 'fixed';
             btnNo.style.left = x + 'px';
             btnNo.style.top = y + 'px';
         }
 
-        // GENERADOR DE CORAZONES (CAYENDO)
+        // GENERADOR DE CORAZONES
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            const icons = ['❤️', '💖', '💗', '🌹', '✨'];
+            const icons = ['❤️', '💖', '💗', '✨'];
             heart.innerHTML = icons[Math.floor(Math.random() * icons.length)];
             
             heart.style.left = Math.random() * 100 + 'vw';
@@ -194,11 +198,10 @@
             heart.style.fontSize = Math.random() * 15 + 15 + 'px';
             
             document.body.appendChild(heart);
-            
             setTimeout(() => { heart.remove(); }, 5000);
         }
 
-        // Iniciar lluvia suave
+        // Iniciar lluvia suave al cargar
         setInterval(createHeart, 400);
 
     </script>
