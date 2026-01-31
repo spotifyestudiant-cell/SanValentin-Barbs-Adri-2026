@@ -95,7 +95,7 @@
             <div class="gif-container">
                 <img id="main-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueG54Z2Z4bmZ4bmZ4bmZ4bmZ4bmZ4bmZ4bmZ4bmZ4bmZ4bmZ4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/c76IJLufpNUMvULn6W/giphy.gif" alt="Cargando...">
             </div>
-            <h1 id="question">¿Quieres ser mi San Valentín? ❤️</h1>
+            <h1 id="question">Bárbara (amorsito) quieres ser mi  San Valentín? ❤️</h1>
             
             <div class="buttons">
                 <button id="btn-si">¡Sí!</button>
@@ -113,7 +113,7 @@
 
         // Acción cuando hace clic en SÍ
         btnSi.addEventListener('click', () => {
-            question.innerHTML = "¡Sabía que dirías que sí! Te amo ❤️";
+            question.innerHTML = "¡Sabía que dirías que sí jejeje! Te amo mi princesita ❤️";
             mainGif.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueG54Z2Z4bmZ4bmZ4bmZ4bmZ4bmZ4bmZ4bmZ4bmZ4bmZ4bmZ4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/lTQF0ODLLJHzaOBCfy/giphy.gif"; // GIF de celebración
             btnNo.style.display = 'none'; // Desaparece el botón No
         });
@@ -127,6 +127,18 @@
             btnNo.style.left = x + 'px';
             btnNo.style.top = y + 'px';
         });
+        /* --- GENERADOR DE CORAZONES --- */
+function createHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.innerHTML = '❤️';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+    document.body.appendChild(heart);
+    
+    setTimeout(() => { heart.remove(); }, 5000);
+}
+setInterval(createHeart, 300);
     </script>
 
 </body>
