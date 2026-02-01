@@ -17,9 +17,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh; /* Cambiado a min-height para permitir scroll si la foto es muy alta */
             margin: 0;
-            overflow: hidden;
+            overflow-x: hidden;
             text-align: center;
         }
 
@@ -49,6 +49,7 @@
             max-width: 400px;
             width: 85%;
             z-index: 10;
+            margin: 20px 0; /* Espacio extra para que no pegue arriba/abajo */
         }
 
         h1 {
@@ -58,10 +59,10 @@
             margin: 10px 0;
         }
 
-        /* --- MARCO DE FOTOS INICIAL/FINAL --- */
+        /* --- MARCO DE FOTOS VERTICAL (EL DOBLE DE ALTO) --- */
         .img-container {
             width: 100%;
-            height: 250px;
+            height: 500px; /* AQUÍ HEMOS DOBLADO LA ALTURA */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -74,7 +75,7 @@
         .img-container img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* Mantiene la foto perfecta sin estirarla */
             border-radius: 15px;
             transition: opacity 0.5s ease;
         }
@@ -97,7 +98,7 @@
             justify-content: center;
             align-items: center;
             gap: 20px;
-            margin-top: 20px;
+            margin-top: 10px;
             min-height: 80px;
         }
 
@@ -114,7 +115,7 @@
         #btn-si { background-color: var(--primary-pink); color: white; z-index: 100; }
         #btn-no { background-color: #adb5bd; color: white; z-index: 999; }
 
-        /* --- NOTA SECRETA CON FOTO SORPRESA --- */
+        /* --- NOTA SECRETA --- */
         #secret-note {
             display: none;
             position: fixed;
@@ -128,21 +129,16 @@
             width: 85%;
             max-width: 320px;
             border: 2px dashed var(--primary-pink);
+            max-height: 90vh; /* Para que no se salga en móviles */
+            overflow-y: auto;
         }
 
         #secret-img {
             width: 100%;
-            height: auto; /* MANTIENE PROPORCIONES ORIGINALES */
+            height: auto;
             border-radius: 15px;
             margin-bottom: 15px;
             border: 2px solid #ffeef2;
-        }
-
-        #secret-note p {
-            color: #d63384;
-            font-size: 0.95rem;
-            line-height: 1.4;
-            margin-bottom: 15px;
         }
 
         .overlay {
@@ -157,7 +153,6 @@
 <body>
 
     <audio id="vuestraCancion" src="cancion.mp3" preload="auto"></audio>
-
     <div class="overlay" id="overlay"></div>
     
     <div id="secret-note">
@@ -194,7 +189,6 @@
         let noClicks = 0;
         let isMoving = false;
 
-        // LOGICA EASTER EGG
         dateInput.addEventListener('input', (e) => {
             if (e.target.value === '24/09/2023') {
                 document.getElementById('secret-note').style.display = 'block';
@@ -208,11 +202,8 @@
             document.getElementById('overlay').style.display = 'none';
         }
 
-        // CLIC SÍ
         btnSi.addEventListener('click', () => {
-            // INICIAR MÚSICA
-            audio.play().catch(error => console.log("La reproducción automática fue bloqueada, pero se activará con el clic."));
-            
+            audio.play().catch(e => console.log("Audio ready"));
             document.getElementById('input-wrapper').style.display = 'none';
             if (noClicks === 0) {
                 questionText.innerHTML = "¡Vaya, qué rapidez! 😍 <br> ¡Sabía que me amabas!";
@@ -231,7 +222,6 @@
             setInterval(createHeart, 100);
         }
 
-        // CLIC NO
         btnNo.addEventListener('click', () => {
             if (noClicks < 4) {
                 const frases = ["¿Segura?", "¿Piénsalo?", "Mira el rosa...", "¡Noooo!"];
