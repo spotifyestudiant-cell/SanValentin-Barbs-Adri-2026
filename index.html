@@ -17,7 +17,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* Cambiado a min-height para permitir scroll si la foto es muy alta */
+            min-height: 100vh;
             margin: 0;
             overflow-x: hidden;
             text-align: center;
@@ -49,7 +49,7 @@
             max-width: 400px;
             width: 85%;
             z-index: 10;
-            margin: 20px 0; /* Espacio extra para que no pegue arriba/abajo */
+            margin: 20px 0;
         }
 
         h1 {
@@ -59,10 +59,10 @@
             margin: 10px 0;
         }
 
-        /* --- MARCO DE FOTOS VERTICAL (EL DOBLE DE ALTO) --- */
+        /* --- MARCO DE FOTOS VERTICAL --- */
         .img-container {
             width: 100%;
-            height: 500px; /* AQUÍ HEMOS DOBLADO LA ALTURA */
+            height: 500px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -75,7 +75,7 @@
         .img-container img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Mantiene la foto perfecta sin estirarla */
+            object-fit: cover;
             border-radius: 15px;
             transition: opacity 0.5s ease;
         }
@@ -93,7 +93,7 @@
         }
 
         /* --- BOTONES --- */
-        .buttons {
+        .buttons, #besito-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -112,7 +112,7 @@
             transition: 0.2s;
         }
 
-        #btn-si { background-color: var(--primary-pink); color: white; z-index: 100; }
+        #btn-si, #btn-besito { background-color: var(--primary-pink); color: white; z-index: 100; }
         #btn-no { background-color: #adb5bd; color: white; z-index: 999; }
 
         /* --- NOTA SECRETA --- */
@@ -129,7 +129,7 @@
             width: 85%;
             max-width: 320px;
             border: 2px dashed var(--primary-pink);
-            max-height: 90vh; /* Para que no se salga en móviles */
+            max-height: 90vh;
             overflow-y: auto;
         }
 
@@ -176,19 +176,26 @@
             <button id="btn-si">¡SÍ! 😍</button>
             <button id="btn-no">No 😢</button>
         </div>
+
+        <div id="besito-wrapper" style="display:none">
+            <button id="btn-besito">¿Un besito? 💋</button>
+        </div>
     </div>
 
     <script>
         const btnSi = document.getElementById('btn-si');
         const btnNo = document.getElementById('btn-no');
+        const btnBesito = document.getElementById('btn-besito');
         const mainImg = document.getElementById('main-img');
         const dateInput = document.getElementById('date-input');
         const questionText = document.getElementById('question');
         const audio = document.getElementById('vuestraCancion');
+        const besitoWrapper = document.getElementById('besito-wrapper');
         
         let noClicks = 0;
         let isMoving = false;
 
+        // Easter Egg
         dateInput.addEventListener('input', (e) => {
             if (e.target.value === '24/09/2023') {
                 document.getElementById('secret-note').style.display = 'block';
@@ -202,8 +209,9 @@
             document.getElementById('overlay').style.display = 'none';
         }
 
+        // Clic en SÍ
         btnSi.addEventListener('click', () => {
-            audio.play().catch(e => console.log("Audio ready"));
+            audio.play().catch(e => console.log("Audio listo para sonar"));
             document.getElementById('input-wrapper').style.display = 'none';
             if (noClicks === 0) {
                 questionText.innerHTML = "¡Vaya, qué rapidez! 😍 <br> ¡Sabía que me amabas!";
@@ -219,9 +227,22 @@
             mainImg.src = "nosotros_final.jpg"; 
             document.getElementById('btn-group').style.display = 'none';
             if(isMoving) btnNo.style.display = 'none'; 
+            
+            setTimeout(() => {
+                besitoWrapper.style.display = 'flex';
+            }, 1500);
+
             setInterval(createHeart, 100);
         }
 
+        // Acción del botón BESITO (Cambiado a GIF)
+        btnBesito.addEventListener('click', () => {
+            mainImg.src = "final2.gif"; // NOMBRE DEL ARCHIVO GIF
+            questionText.innerHTML = "¡Muuuaaaa! ❤️ <br> Nos vemos pronto mi amor.";
+            btnBesito.style.display = 'none'; 
+        });
+
+        // Botón NO saltarín
         btnNo.addEventListener('click', () => {
             if (noClicks < 4) {
                 const frases = ["¿Segura?", "¿Piénsalo?", "Mira el rosa...", "¡Noooo!"];
@@ -250,6 +271,7 @@
             btnNo.style.top = y + 'px';
         }
 
+        // Generador de lluvia
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
