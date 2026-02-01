@@ -38,7 +38,7 @@
             to { transform: translateY(110vh) rotate(360deg); }
         }
 
-        /* --- CONTENEDOR --- */
+        /* --- CONTENEDOR PRINCIPAL --- */
         .container {
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
@@ -58,10 +58,10 @@
             margin: 10px 0;
         }
 
-        /* --- MARCO DE FOTOS ADAPTABLE --- */
+        /* --- MARCO DE FOTOS INICIAL/FINAL --- */
         .img-container {
             width: 100%;
-            height: 250px; /* Altura ideal para fotos */
+            height: 250px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -74,7 +74,7 @@
         .img-container img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Evita que la foto se estire */
+            object-fit: cover;
             border-radius: 15px;
             transition: opacity 0.5s ease;
         }
@@ -114,20 +114,35 @@
         #btn-si { background-color: var(--primary-pink); color: white; z-index: 100; }
         #btn-no { background-color: #adb5bd; color: white; z-index: 999; }
 
-        /* --- NOTA SECRETA --- */
+        /* --- NOTA SECRETA CON FOTO SORPRESA --- */
         #secret-note {
             display: none;
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 20px;
             box-shadow: 0 0 100px rgba(0,0,0,0.3);
             z-index: 2000;
-            width: 80%;
-            max-width: 300px;
+            width: 85%;
+            max-width: 320px;
             border: 2px dashed var(--primary-pink);
+        }
+
+        #secret-img {
+            width: 100%;
+            height: auto; /* MANTIENE PROPORCIONES ORIGINALES */
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border: 2px solid #ffeef2;
+        }
+
+        #secret-note p {
+            color: #d63384;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
         }
 
         .overlay {
@@ -141,11 +156,15 @@
 </head>
 <body>
 
+    <audio id="vuestraCancion" src="cancion.mp3" preload="auto"></audio>
+
     <div class="overlay" id="overlay"></div>
+    
     <div id="secret-note">
         <h3>💌 Nota Secreta</h3>
+        <img id="secret-img" src="secreto.jpg" alt="Sorpresa ❤️">
         <p>"Eeeeesaaaaa era la fechaaaa!!! Eres el pilar que sostiene mi vida, mi amor❤️. Gracias por ser tú, te quiero muchiiiiiiiiisimo ❤️      -Adri"</p>
-        <button onclick="closeSecret()" style="background: var(--primary-pink); color: white; padding: 5px 15px; border-radius: 10px; cursor: pointer;">Cerrar</button>
+        <button onclick="closeSecret()" style="background: var(--primary-pink); color: white; padding: 8px 20px; border-radius: 10px; cursor: pointer;">Cerrar</button>
     </div>
 
     <div class="container" id="main-card">
@@ -170,6 +189,7 @@
         const mainImg = document.getElementById('main-img');
         const dateInput = document.getElementById('date-input');
         const questionText = document.getElementById('question');
+        const audio = document.getElementById('vuestraCancion');
         
         let noClicks = 0;
         let isMoving = false;
@@ -190,10 +210,13 @@
 
         // CLIC SÍ
         btnSi.addEventListener('click', () => {
+            // INICIAR MÚSICA
+            audio.play().catch(error => console.log("La reproducción automática fue bloqueada, pero se activará con el clic."));
+            
             document.getElementById('input-wrapper').style.display = 'none';
             if (noClicks === 0) {
                 questionText.innerHTML = "¡Vaya, qué rapidez! 😍 <br> ¡Sabía que me amabas!";
-                mainImg.src = "nosotros_final.jpg"; // FOTO FINAL
+                mainImg.src = "nosotros_final.jpg"; 
                 setTimeout(finalCelebration, 2000);
             } else {
                 finalCelebration();
@@ -240,7 +263,7 @@
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            const icons = ['❤️', '💖', '💐'];
+            const icons = ['❤️', '💖', '💐', '✨', '🌸'];
             heart.innerHTML = icons[Math.floor(Math.random() * icons.length)];
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.animationDuration = Math.random() * 3 + 2 + 's';
